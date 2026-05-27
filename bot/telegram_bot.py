@@ -43,38 +43,32 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = str(update.effective_user.id)
     message = update.message.text
 
-    # 1. Route
-    property_key = route_property(message)
+    try:
+        # 1. Route
+        property_key = route_property(message)
 
-    # 2. Get memory
-    memory = get_memory(user_id)
-    history = memory.load_memory_variables({}).get("chat_history", [])
+        # 2. Get memory
+        memory = get_memory(user_id)
+        history = memory.load_memory_variables({}).get("chat_history", [])
 
-    # 3. Build context from history
-    history_text = ""
-    for msg in history:
-        role = "Guest" if msg.type == "human" else "Assistant"
-        history_text += f"{role}: {msg.content}\n"
+        # 3. Build context from history
+        history_text = ""
+        for msg in history:
+            role = "Guest" if msg.type == "human" else "Assistant"
+            history_text += f"{role}: {msg.content}\n"
 
-    # 4. Answer
-    chain = get_chain(property_key)
-    full_question = f"{history_text}Guest: {message}" if history_text else message
-    answer = chain(full_question)
+        # 4. Answer
+        chain = get_chain(property_key)
+        full_question = f"{history_text}Guest: {message}" if history_text else message
+        answer = chain(full_question)
 
-    # 5. Save to memory
-    memory.save_context({"input": message}, {"output": answer})
+        # 5. Save to memory
+        memory.save_context({"input": message}, {"output": answer})
 
-    await update.message.reply_text(answer)
+        await update.message.reply_text(answer)
 
-
-def run_bot():
-    token = os.getenv("TELEGRAM_BOT_TOKEN")
-    app = ApplicationBuilder().token(token).build()
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-    print("Bot is running...")
-    app.run_polling()
-
-
-if __name__ == "__main__":
-    run_bot()
+    except Exception as e:
+        await update.message.reply_text(
+            "Sorry, I'm having trouble processing your request right now. "
+            "Please try again in a moment."
+        )
