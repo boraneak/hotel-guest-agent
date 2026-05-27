@@ -131,3 +131,19 @@ python3 test_rag.py
 - [ ] Phase 3: Admin dashboard for knowledge base management
 - [ ] Phase 4: Voice message support via Telegram
 - [ ] Phase 4: Full booking and reservation flow
+
+## Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feat/your-feature`)
+3. Commit your changes (`git commit -m "feat: add your feature"`)
+4. Push to the branch (`git push origin feat/your-feature`)
+5. Open a Pull Request
+
+Please make sure your code is formatted with `black` before submitting.
+
+## License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
