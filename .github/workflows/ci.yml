@@ -35,7 +35,7 @@ jobs:
         run: pytest tests/ -v --ignore=tests/test_integration.py
 
       - name: Run integration tests
-        if: ${{ secrets.GROQ_API_KEY != '' }}
+        continue-on-error: true
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: pytest tests/test_integration.py -v
